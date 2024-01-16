@@ -83,7 +83,7 @@ class HomeController extends Controller
 
     public function slider(Request $request)
     {
-        $data = Product::where(['status' => 'active', 'has_ad' => 1])/*->select('id', 'image','name')*/
+        $data = Product::where([['status' , 'active'], ['panner_end_date' ,'>=',date('Y-m-d')]])/*->select('id', 'image','name')*/
         ;
         return $this->apiResponse($data);
     }

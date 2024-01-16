@@ -21,25 +21,32 @@ class ProductController extends Controller
         $data = $request->except('images');
         $data['user_id'] = user_api()->id();
         $data['country_id'] = user_api()->user()->country_id;
+        $data['end_date'] = date('Y-m-d', strtotime('+' . $request->day_num . ' day'));
+        $productCount = Product::where('user_id', user_api()->id())->count();
+
+        if (!user_api()->user()->package && $productCount >= 1) {
+            return $this->apiResponse(null, 'نفذت محاولاتك لاضافة اعلان اليوم', 'simple', '422');
+        }
+
         $product = Product::create($data);
 
-        if (isset($request->images)){
-            foreach ($request->images as $key=>$image) {
+        if (isset($request->images)) {
+            foreach ($request->images as $key => $image) {
                 $productImage = ProductImage::create([
                     'product_id' => $product->id,
                     'image' => $this->saveImage($image, 'uploads/productImage')
                 ]);
-                if ($key == 0){
+                if ($key == 0) {
                     $product['image'] = $productImage->image;
                     $product->save();
                 }
             }
         }
 
-        if (isset($request->video_cover)){
+        if (isset($request->video_cover)) {
             $product['video_cover'] = $this->saveImage($request->video_cover, 'uploads/product');
         }
-        if (isset($request->video)){
+        if (isset($request->video)) {
             $product['video'] = $this->saveImage($request->video, 'uploads/product');
         }
         $product->save();
@@ -47,38 +54,39 @@ class ProductController extends Controller
         return $this->apiResponse($product, '', 'simple');
     }
 
-    public function update(StoreProductRequest $request , $id)
+    public function update(StoreProductRequest $request, $id)
     {
-        $data = $request->except('images' , 'remove_video');
+        $data = $request->except('images', 'remove_video');
         $data['user_id'] = user_api()->id();
+        $data['status'] = 'pending';
         $product = Product::find($id);
         $product->update($data);
-        if (isset($request->images)){
-            $productImage = ProductImage::where('product_id',$id)->get();
-            foreach($productImage as $image){
+        if (isset($request->images)) {
+            $productImage = ProductImage::where('product_id', $id)->get();
+            foreach ($productImage as $image) {
                 $this->deleteImage($image->image);
                 $image->delete();
             }
 
-            foreach ($request->images as $key=>$image) {
+            foreach ($request->images as $key => $image) {
                 $productImage = ProductImage::create([
                     'product_id' => $id,
                     'image' => $this->saveImage($image, 'uploads/productImage')
                 ]);
-                if ($key == 0){
+                if ($key == 0) {
                     $product['image'] = $productImage->image;
                     $product->save();
                 }
             }
         }
 
-        if (isset($request->video_cover)){
-            $product['video_cover'] = $this->saveImage($request->video_cover, 'uploads/product',$product['video_cover']);
+        if (isset($request->video_cover)) {
+            $product['video_cover'] = $this->saveImage($request->video_cover, 'uploads/product', $product['video_cover']);
         }
-        if (isset($request->video)){
-            $product['video'] = $this->saveImage($request->video, 'uploads/product',$product['video']);
+        if (isset($request->video)) {
+            $product['video'] = $this->saveImage($request->video, 'uploads/product', $product['video']);
         }
-        if ($request->remove_video && $request->remove_video == 1){
+        if ($request->remove_video && $request->remove_video == 1) {
             if (file_exists($product['video']))
                 unlink($product['video']);
             if (file_exists($product['video_cover']))
@@ -91,24 +99,27 @@ class ProductController extends Controller
 
     }
 
-    public function one_product(OneProductRequest $request){
-        $product = Product::where('id',$request->id)->with($this->productAllRelations())
+    public function one_product(OneProductRequest $request)
+    {
+        $product = Product::where('id', $request->id)->with($this->productAllRelations())
             ->withCount('comments')->first();
 
         return $this->apiResponse($product, '', 'simple');
     }
 
-    public function user_products(UserProductsRequest $request){
+    public function user_products(UserProductsRequest $request)
+    {
         $data = Product::where('user_id', $request->user_id)->with($this->productRelations())
             ->withCount('comments');
-        if ($request->user_id != user_api()->id() ){
-            $data = $data->where('status' , 'active');
+        if ($request->user_id != user_api()->id()) {
+            $data = $data->where('status', 'active');
         }
         return $this->apiResponse($data);
     }
 
-    public function delete(OneProductRequest $request){
-        Product::where('id',$request->id)->delete();
+    public function delete(OneProductRequest $request)
+    {
+        Product::where('id', $request->id)->delete();
         return $this->apiResponse('done', '', 'simple');
     }
 

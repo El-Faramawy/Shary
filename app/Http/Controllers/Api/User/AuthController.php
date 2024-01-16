@@ -186,6 +186,14 @@ class AuthController extends Controller
                 ]);
             }
         }
+        if ($request->from_sa){
+            $user = user_api()->user();
+            if ($request->from_sa == 'yes'){
+                $user->verified = 1;
+            }
+            $user->from_sa = $request->from_sa;
+            $user->save();
+        }
         return $this->apiResponse(null, 'done', 'simple');
 
     }
@@ -194,10 +202,10 @@ class AuthController extends Controller
     {
         $data = User::query();
         if ($request->name) {
-            $data->where('name', 'LIKE','%'. $request->name .'%');
+            $data->where('name', 'LIKE', '%' . $request->name . '%');
         }
         if ($request->phone) {
-            $data->where('phone', 'LIKE','%'. $request->phone .'%');
+            $data->where('phone', 'LIKE', '%' . $request->phone . '%');
         }
         return $this->apiResponse($data);
     }

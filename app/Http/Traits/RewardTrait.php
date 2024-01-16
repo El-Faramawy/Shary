@@ -15,8 +15,11 @@ trait  RewardTrait
         if ($product->has_reword == 0) {
             $follow_count = Following::where('product_id', $product->id)->count();
             $favourite_count = Favourate::where('product_id', $product->id)->count();
-            if ($follow_count >= setting()->follow_reword &&
-                $favourite_count >= setting()->like_reword) {
+            $user_rate = $product->user?->rate ?? 0;
+            if ( ($user_rate * 20) >= 80 &&
+                ( $follow_count >= setting()->follow_reword ||
+                    $favourite_count >= setting()->like_reword )
+            ) {
                 user_api()->user()->update(['wallet' => user_api()->user()->wallet + setting()->reword]);
                 $product->update(['has_reword' => 1]);
                 Reword::create([

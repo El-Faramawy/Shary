@@ -49,7 +49,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     protected $guarded = [];
-    protected $appends = ['is_follow'];
+    protected $appends = ['is_follow', 'package'];
 
     public function getImageAttribute()
     {
@@ -94,6 +94,22 @@ class User extends Authenticatable implements JWTSubject
         } else {
             return 'no';
         }
+    }
+
+    //===================  package ===========================
+    public function getPackageAttribute()
+    {
+        $userPackage = UserPackage::where('user_id', $this->attributes['id'])
+            ->where(function ($q) {
+                $q->where('end_date', '>=', date('Y-m-d'));
+            })
+            ->with('package')->first();
+        if ($userPackage) {
+            $userPackage->package->start_date = $userPackage->start_date;
+            $userPackage->package->end_date = $userPackage->end_date;
+            return $userPackage->package;
+        }
+        return null;
     }
 
 }

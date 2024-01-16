@@ -84,6 +84,13 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
         Route::post('add_commission','CommissionController@add_commission');
         Route::get('commissions','CommissionController@commissions');
 
+        /* ---------------------- ad_packages -------------------*/
+        Route::get('ad_packages','AdPackageController@ad_packages');
+        Route::post('updateAdPackage','AdPackageController@updateAdPackage');
+
+        /* ---------------------- packages -------------------*/
+        Route::get('packages','PackageController@packages');
+        Route::post('store_package','PackageController@store');
 
 
     });
