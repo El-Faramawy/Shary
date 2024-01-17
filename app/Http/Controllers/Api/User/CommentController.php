@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Comment\AddCommentRequest;
 use App\Http\Requests\Api\Comment\AddReplyRequest;
+use App\Http\Requests\Api\Comment\DeleteCommentRequest;
+use App\Http\Requests\Api\Comment\DeleteReplyRequest;
 use App\Http\Traits\NotificationTrait;
 use App\Http\Traits\PaginateTrait;
 use App\Models\ProductComment;
@@ -39,5 +41,16 @@ class CommentController extends Controller
         return $this->apiResponse($comment, 'done', 'simple');
     }
 
+    public function delete_comment(DeleteCommentRequest $request)
+    {
+        ProductComment::where('id',$request->comment_id)->delete();
+        return $this->apiResponse(null, 'done', 'simple');
+    }
+
+    public function delete_reply(DeleteReplyRequest $request)
+    {
+        ProductReply::where('id',$request->reply_id)->delete();
+        return $this->apiResponse(null, 'done', 'simple');
+    }
 
 }

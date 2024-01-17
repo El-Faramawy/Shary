@@ -63,7 +63,9 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
 
         /* ---------------------- comments -------------------*/
         Route::post('add_comment','CommentController@add_comment');
+        Route::post('delete_comment','CommentController@delete_comment');
         Route::post('add_reply','CommentController@add_reply');
+        Route::post('delete_reply','CommentController@delete_reply');
 
         Route::post('add_rate','RateController@add_rate');
         Route::get('rates','RateController@rates');
