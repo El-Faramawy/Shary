@@ -18,20 +18,13 @@ class AreaController extends Controller
                 ->where('city_id',$request->city_id)->latest()->get();
             return Datatables::of($areas)
                 ->addColumn('action', function ($item) {
-                    $action = '';
-//                    if (in_array(61, admin()->user()->permission_ids)) {
-                        $action .= '
+                    return '
                         <button  id="editBtn" class="btn btn-default btn-primary btn-sm mb-2  mb-xl-0 "
                              data-id="' . $item->id . '" ><i class="fa fa-edit text-white"></i>
-                        </button>';
-//                    }
-//                    if(in_array(62,admin()->user()->permission_ids)) {
-                        $action .=  '
-                             <a class="btn btn-default btn-danger btn-sm mb-2 mb-xl-0 delete"
+                        </button>
+                        <a class="btn btn-default btn-danger btn-sm mb-2 mb-xl-0 delete"
                              data-id="' . $item->id . '" ><i class="fa fa-trash-o text-white"></i></a>
                        ';
-//                    }
-                    return $action;
                 })
                 ->editColumn('city',function ($item){
                     return $item->city ? $item->city->name_ar : '';

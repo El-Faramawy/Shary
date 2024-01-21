@@ -1,6 +1,7 @@
 <!--begin::Form-->
 <form id="form" enctype="multipart/form-data" method="POST" action="{{route('cities.store')}}">
     @csrf
+    <input type="hidden" value="{{$country_id}}" name="country_id">
     <div class="row mt-0">
         <!--begin::Input group-->
         <div class="d-flex flex-column mb-2 fv-row col-sm-12 mt-0">

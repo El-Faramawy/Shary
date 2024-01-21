@@ -12,7 +12,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="{{$setting->fav_icon}}" />
 
 <!-- TITLE -->
-<title>حراج للسيارات</title>
+<title>شارى</title>
 
 <!-- BOOTSTRAP CSS -->
 <link href="{{url('Admin')}}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />

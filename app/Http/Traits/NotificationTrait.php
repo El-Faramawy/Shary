@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 
 use App\Models\Notification;
 use App\Models\PhoneToken;
+use App\Models\User;
 
 trait NotificationTrait
 {
@@ -35,6 +36,15 @@ trait NotificationTrait
         $data = [];
         $data['message_type'] = $message_type;
         $data = json_encode($data);
+
+        $users_array = [];
+        foreach ($array_to as $user_id){
+            $user = User::where('id',$user_id)->first();
+            if ($user['has_notification'] == 'yes'){
+                $users_array[] = $user_id;
+            }
+        }
+
         $tokens = PhoneToken::whereIn("user_id", $array_to)->pluck('phone_token')->toArray();
         $SERVER_API_KEY = env('FIREBASE_KEY');
         $data = [
@@ -77,10 +87,13 @@ trait NotificationTrait
         $data['title'] = $title;
         $data['message'] = $message;
 
-        foreach ($array_to as $user) {
-            $data['user_id'] = $user;
-            Notification::create($data);
-            $data['user_id'] = null;
+        foreach ($array_to as $user_id) {
+            $user = User::where('id',$user_id)->first();
+            if ($user['has_notification'] == 'yes'){
+                $data['user_id'] = $user_id;
+                Notification::create($data);
+                $data['user_id'] = null;
+            }
         }
 
     }

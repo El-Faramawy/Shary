@@ -6,21 +6,27 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">الباقات</h3>
+                    <div class="mr-auto pageheader-btn">
+                        <a href="#" id="addBtn" class="btn btn-primary btn-icon text-white">
+                            <span>
+                                <i class="fe fe-plus"></i>
+                            </span> اضافة جديد
+                        </a>
+                        <a href="#" id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
+                            <span>
+                                <i class="fa fa-trash-o"></i>
+                            </span> حذف المحدد
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="exportexample" class="table table-striped table-responsive-lg  card-table table-vcenter text-nowrap mb-0 table-primary align-items-center mb-0">
                             <thead class="bg-primary text-white">
                             <tr>
-                                <th class="text-white">النوع</th>
+                                <th class="text-white"><input type="checkbox" id="master"></th>
                                 <th class="text-white">عدد الشهور</th>
                                 <th class="text-white">السعر</th>
-                                <th class="text-white">عدد اعلانات اليوم</th>
-{{--                                <th class="text-white">عدد اعلانات البانر</th>--}}
-                                <th class="text-white">اغلاق الشات</th>
-                                <th class="text-white">عدد الاشهر المجانية</th>
-                                <th class="text-white">عدد التصاميم المجانية</th>
-                                <th class="text-white">اظهار العضوية</th>
                                 <th class="text-white">تحكم</th>
                             </tr>
                             </thead>
@@ -85,15 +91,9 @@
 
     <script>
         var  columns =[
-            {data: 'type', name: 'type'},
+            {data: 'checkbox', name: 'checkbox', orderable: false, searchable: false},
             {data: 'period', name: 'period'},
             {data: 'price', name: 'price'},
-            {data: 'daily_ads', name: 'daily_ads'},
-            // {data: 'panner_ads', name: 'panner_ads'},
-            {data: 'close_chat', name: 'close_chat'},
-            {data: 'free_months_number', name: 'free_months_number'},
-            {data: 'free_ads_number', name: 'free_ads_number'},
-            {data: 'show_vip', name: 'show_vip'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];
         //======================== addBtn =============================

@@ -12,28 +12,25 @@ class CityController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->ajax()){
-            $cities =City::latest()->get();
+        if ($request->ajax()) {
+            $cities = City::with('country')
+                ->where('country_id', $request->country_id)->latest()->get();
             return Datatables::of($cities)
                 ->addColumn('action', function ($item) {
-                    $action = '';
-//                    if (in_array(61, admin()->user()->permission_ids)) {
-                        $action .= '
+                    return '
                         <button  id="editBtn" class="btn btn-default btn-primary btn-sm mb-2  mb-xl-0 "
                              data-id="' . $item->id . '" ><i class="fa fa-edit text-white"></i>
-                        </button>';
-//                    }
-//                    if(in_array(62,admin()->user()->permission_ids)) {
-                        $action .=  '
+                        </button>
                              <a class="btn btn-default btn-danger btn-sm mb-2 mb-xl-0 delete"
                              data-id="' . $item->id . '" ><i class="fa fa-trash-o text-white"></i></a>
                        ';
-//                    }
-                    return $action;
+                })
+                ->editColumn('country', function ($item) {
+                    return $item->country->name_ar ?? '';
                 })
                 ->addColumn('areas', function ($item) {
                     return '<a  class="btn btn-icon btn-bg-light btn-info btn-sm me-1 "
-                            href="'.route("areas.index","city_id=".$item->id).'" >
+                            href="' . route("areas.index", "city_id=" . $item->id) . '" >
                             <span class="svg-icon svg-icon-3" style="font-size:12px">
                                 <span class="svg-icon svg-icon-3">
                                     <i class="fa fa-bars "></i>
@@ -41,32 +38,27 @@ class CityController extends Controller
                             </span>
                             </button>';
                 })
-                ->addColumn('checkbox' , function ($item){
-                    return '<input type="checkbox" class="sub_chk" data-id="'.$item->id.'">';
+                ->addColumn('checkbox', function ($item) {
+                    return '<input type="checkbox" class="sub_chk" data-id="' . $item->id . '">';
                 })
                 ->escapeColumns([])
                 ->make(true);
         }
-        return view('Admin.City.index');
+        return view('Admin.City.index',['id'=>$request->country_id?:'']);
     }
-    ################ Add Object #################
-    public function create()
+
+    public function create(Request $request)
     {
-        return view('Admin.City.parts.create')->render();
+        $country_id = $request->id;
+        return view('Admin.City.parts.create',compact('country_id'))->render();
     }
 
     public function store(Request $request)
     {
         $valedator = Validator::make($request->all(), [
-            'name_ar'=>'required',
-            'name_en'=>'required',
-        ]
-//            ,
-//            [
-//                'name_ar.required' => 'الاسم بالعربية مطلوب',
-//                'name_en.required' => 'الاسم بالانجليزية مطلوب',
-//            ]
-        );
+            'name_ar' => 'required',
+            'name_en' => 'required',
+        ]);
         if ($valedator->fails())
             return response()->json(['messages' => $valedator->errors()->getMessages(), 'success' => 'false']);
 
@@ -79,25 +71,18 @@ class CityController extends Controller
                 'message' => 'تم الاضافة بنجاح'
             ]);
     }
-    ################ Edit offer #################
+
     public function edit(City $city)
     {
         return view('Admin.City.parts.edit', compact('city'));
     }
-    ###############################################
-    ################ update offer #################
+
     public function update(Request $request, City $city)
     {
         $valedator = Validator::make($request->all(), [
-            'name_ar'=>'required',
-            'name_en'=>'required',
-        ]
-//            ,
-//            [
-//                'name_ar.required' => 'الاسم بالعربية مطلوب',
-//                'name_en.required' => 'الاسم بالانجليزية مطلوب',
-//            ]
-        );
+            'name_ar' => 'required',
+            'name_en' => 'required',
+        ]);
         if ($valedator->fails())
             return response()->json(['messages' => $valedator->errors()->getMessages(), 'success' => 'false']);
 
@@ -110,7 +95,8 @@ class CityController extends Controller
                 'message' => 'تم التعديل بنجاح '
             ]);
     }
-    ################ multiple Delete  #################
+
+
     public function multiDelete(Request $request)
     {
         $ids = explode(",", $request->ids);
@@ -122,7 +108,8 @@ class CityController extends Controller
                 'message' => 'تم الحذف بنجاح'
             ]);
     }
-    ################ Delete user #################
+
+
     public function destroy(City $city)
     {
         $city->delete();

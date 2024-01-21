@@ -3,52 +3,94 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\NotificationTrait;
-use App\Http\Traits\SendEmail;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
-use App\Models\Contact;
-use App\Models\Notification;
 
 class ContactController extends Controller
 {
-    use NotificationTrait;
-
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $contacts = Contact::latest()->get();
-            return Datatables::of($contacts)
-                ->addColumn('action', function ($contact) {
-                if(in_array(21,admin()->user()->permission_ids)) {
+            $data = Contact::with('contact_category')
+                ->where('contact_category_id', $request->contact_category_id)->latest()->get();
+            return Datatables::of($data)
+                ->addColumn('action', function ($item) {
                     return '
-                        <button class="btn btn-default btn-danger btn-sm mb-2 mb-xl-0 delete"
-                             data-id="' . $contact->id . '" ><i class="fa fa-trash-o text-white"></i>
+                        <button  id="editBtn" class="btn btn-default btn-primary btn-sm mb-2  mb-xl-0 "
+                             data-id="' . $item->id . '" ><i class="fa fa-edit text-white"></i>
                         </button>
+                             <a class="btn btn-default btn-danger btn-sm mb-2 mb-xl-0 delete"
+                             data-id="' . $item->id . '" ><i class="fa fa-trash-o text-white"></i></a>
                        ';
-                    }
                 })
-                ->addColumn('replay', function ($contact) {
-                    if ($contact->user == null && $contact->delivery == null) return '';
-                    if(in_array(20,admin()->user()->permission_ids)) {
-                        return '
-                            <div class="card-options pr-2">
-                                <a class="btn btn-sm btn-primary text-white replayBtn"  href="' . url("admin/replay_contact", $contact->id) . '"><i class="fa fa-reply mb-0"></i></a>
-                            </div>';
-                    }
-
-                })->addColumn('checkbox' , function ($contact){
-                    return '<input type="checkbox" class="sub_chk" data-id="'.$contact->id.'">';
+                ->editColumn('contact_category', function ($item) {
+                    return $item->contact_category->name_ar ?? '';
+                })
+                ->addColumn('checkbox', function ($item) {
+                    return '<input type="checkbox" class="sub_chk" data-id="' . $item->id . '">';
                 })
                 ->escapeColumns([])
                 ->make(true);
         }
-
-        return view('Admin.Contact.index');
+        return view('Admin.Contact.index',['id'=>$request->contact_category_id?:'']);
     }
 
-    ################ multiple Delete  #################
+    public function create(Request $request)
+    {
+        $contact_category_id = $request->id;
+        return view('Admin.Contact.parts.create',compact('contact_category_id'))->render();
+    }
+
+    public function store(Request $request)
+    {
+        $valedator = Validator::make($request->all(), [
+            'question_ar' => 'required',
+            'question_en' => 'required',
+            'answer_ar' => 'required',
+            'answer_en' => 'required',
+        ]);
+        if ($valedator->fails())
+            return response()->json(['messages' => $valedator->errors()->getMessages(), 'success' => 'false']);
+
+        $data = $request->all();
+        Contact::create($data);
+
+        return response()->json(
+            [
+                'success' => 'true',
+                'message' => 'تم الاضافة بنجاح'
+            ]);
+    }
+
+    public function edit(Contact $contact)
+    {
+        return view('Admin.Contact.parts.edit', compact('contact'));
+    }
+
+    public function update(Request $request, Contact $contact)
+    {
+        $valedator = Validator::make($request->all(), [
+            'question_ar' => 'required',
+            'question_en' => 'required',
+            'answer_ar' => 'required',
+            'answer_en' => 'required',
+        ]);
+        if ($valedator->fails())
+            return response()->json(['messages' => $valedator->errors()->getMessages(), 'success' => 'false']);
+
+        $data = $request->all();
+        $contact->update($data);
+
+        return response()->json(
+            [
+                'success' => 'true',
+                'message' => 'تم التعديل بنجاح '
+            ]);
+    }
+
+
     public function multiDelete(Request $request)
     {
         $ids = explode(",", $request->ids);
@@ -61,7 +103,7 @@ class ContactController extends Controller
             ]);
     }
 
-    ################ Delete Contact #################
+
     public function destroy(Contact $contact)
     {
         $contact->delete();
@@ -72,25 +114,5 @@ class ContactController extends Controller
             ]);
     }
 
-    ##############################################
-    public function replay($id)
-    {
-        return view('Admin.Contact.parts.replay', compact('id'));
-    }
 
-    ##############################################
-    public function post_replay(Request $request)
-    {
-        $contact = Contact::where('id', $request->contact_id)->first();
-
-        $this->sendAllNotifications([$contact->user_id], 'تم الرد على رسالتك', $request->message);
-
-        return response()->json(
-            [
-                'success' => 'true',
-                'message' => 'تم الرد بنجاح '
-            ]);
-    }
-
-    ##############################################
 }

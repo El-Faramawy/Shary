@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\UserTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\NotificationTrait;
 use App\Models\VerifyAccount;
-use App\Models\VerifyAccountImage;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Order;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -28,26 +23,17 @@ class UserController extends Controller
             }
             return Datatables::of($users)
                 ->addColumn('action', function ($user) {
-//                    if(in_array(7,admin()->user()->permission_ids)) {
                     return '
                              <a class="btn btn-default btn-danger btn-sm mb-2 mb-xl-0 delete"
                              data-id="' . $user->id . '" ><i class="fa fa-trash-o text-white"></i></a>
                        ';
-//                    }
+                })
+                ->editColumn('image', function ($user) {
+                    return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="' . $user->image . '">';
                 })
                 ->addColumn('packages', function ($user) {
                     return '<a  class="btn btn-icon btn-bg-light btn-info btn-sm me-1 "
                             href="'.route("user_packages.index","user_id=".$user->id).'" >
-                            <span class="svg-icon svg-icon-3" style="font-size:12px">
-                                <span class="svg-icon svg-icon-3">
-                                    <i class="fa fa-bars "></i>
-                                </span>
-                            </span>
-                            </button>';
-                })
-                ->addColumn('ad_packages', function ($user) {
-                    return '<a  class="btn btn-icon btn-bg-light btn-info btn-sm me-1 "
-                            href="'.route("user_ad_packages.index","user_id=".$user->id).'" >
                             <span class="svg-icon svg-icon-3" style="font-size:12px">
                                 <span class="svg-icon svg-icon-3">
                                     <i class="fa fa-bars "></i>
@@ -68,26 +54,15 @@ class UserController extends Controller
                 ->editColumn('block',function ($user){
                     $color = $user->block == "yes" ? "danger" :"dark";
                     $text = $user->block == "yes" ? "الغاء حظر" :"حظر";
-                    $block =in_array(10,admin()->user()->permission_ids)? "block" : " ";
-                    return '<a class="'. $block .' text-center fw-3  text-' . $color . '" data-id="' . $user->id . '" data-text="' . $text . '" style="cursor: pointer"><i class="py-2 fw-3  fa fa-ban text-' . $color . '" ></i></a>';
+                    return '<a class="block text-center fw-3  text-' . $color . '" data-id="' . $user->id . '" data-text="' . $text . '" style="cursor: pointer"><i class="py-2 fw-3  fa fa-ban text-' . $color . '" ></i></a>';
                 })
-                ->editColumn('image', function ($user) {
-                    return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="' . $user->image . '">';
-                })
-                ->editColumn('company_image', function ($user) {
-                    return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="' . $user->company_image . '">';
-                })
-                ->editColumn('company_panner', function ($user) {
-                    return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="' . $user->company_panner . '">';
-                })
-                ->addColumn('address', function ($item) {
-                    $text = "الذهاب للعنوان";
-                    return '<a href= "https://maps.google.com/?q=' . $item->latitude . ',' . $item->longitude . '" target="_blank">' . $text . '</a>';
-                })
-                ->editColumn('type', function ($user) {
-                    $color = $user->type == UserTypeEnum::USER ? "light" : "primary";
-                    $text = $user->type == UserTypeEnum::USER ? "فرد" : "شركة";
+                ->editColumn('from_sa', function ($user) {
+                    $color = $user->from_sa == 0 ? "danger" : "success";
+                    $text = $user->from_sa == 0 ? "لا" : "نعم";
                     return '<span class=" badge badge-sm badge-' . $color . '" >' . $text . '</span>';
+                })
+                ->addColumn('country', function ($user) {
+                    return $user->country->name ?? '' ;
                 })
                 ->editColumn('rate', function ($user) {
                     return ' <i class="py-2 fw-1 fa fa-star text-warning"></i> ' .$user->rate ;
@@ -177,7 +152,7 @@ class UserController extends Controller
     public function verify_images(Request $request)
     {
         $verify_account = VerifyAccount::where('user_id', $request->id)->latest()->first();
-        $verify_account_images = VerifyAccountImage::where('user_id', $request->id)->get();
+        $verify_account_images = VerifyAccount::where('user_id', $request->id)->get();
         return view('Admin.User.parts.verify_account', compact('verify_account', 'verify_account_images'))->render();
     }
 }

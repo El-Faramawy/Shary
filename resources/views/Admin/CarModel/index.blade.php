@@ -1,26 +1,22 @@
 @extends('layouts.admin.app')
-@section('page_title') الأقسام @endsection
+@section('page_title')  موديلات السيارات @endsection
 @section('content')
     <div class="row">
         <div class="col-md-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">الأقسام</h3>
+                    <h3 class="card-title"> موديلات السيارات</h3>
                     <div class="mr-auto pageheader-btn">
-{{--                        @if(in_array(63,admin()->user()->permission_ids))--}}
                             <a href="#"  id="addBtn" class="btn btn-primary btn-icon text-white">
                                             <span>
                                                 <i class="fe fe-plus"></i>
                                             </span> اضافة جديد
                             </a>
-{{--                        @endif--}}
-{{--                        @if(in_array(62,admin()->user()->permission_ids))--}}
                             <a href="#"  id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
                                             <span>
                                                 <i class="fa fa-trash-o"></i>
                                             </span> حذف المحدد
                             </a>
-{{--                        @endif--}}
                     </div>
                 </div>
                 <div class="card-body">
@@ -30,9 +26,9 @@
                             <tr>
                                 <th class="text-white"><input type="checkbox" id="master"></th>
                                 <th class="text-white">#</th>
-                                <th class="text-white">الصورة</th>
                                 <th class="text-white">الاسم</th>
-                                <th class="text-white">الاقسام الفرعية</th>
+                                <th class="text-white">تصنيف السيارة</th>
+                                <th class="text-white">الالوان</th>
                                 <th class="text-white">تحكم</th>
                             </tr>
                             </thead>
@@ -56,7 +52,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>الأقسام</h2>
+                    <h2> موديلات السيارات</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" style="cursor: pointer" data-dismiss="modal" aria-label="Close">
@@ -101,14 +97,25 @@
         var  columns =[
             {data: 'checkbox', name: 'checkbox', orderable: false, searchable: false},
             {data: 'id', name: 'id'},
-            {data: 'image', name: 'image'},
-            {data: 'name', name: 'name'},
-            {data: 'sub_categories', name: 'sub_categories'},
+            {data: 'name_ar', name: 'name_ar'},
+            {data: 'car_category', name: 'car_category'},
+            {data: 'car_colors', name: 'car_colors'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];
         //======================== addBtn =============================
 
     </script>
-    @include('layouts.admin.inc.ajax',['url'=>'categories'])
+    @include('layouts.admin.inc.ajax',['url'=>'car_models'])
+    <script>
 
+        $(document).on('click', '#addBtn', function (e) {
+            e.preventDefault();
+            $('#form-load').html(loader)
+            $('#Modal').modal('show')
+            var id = "{{$id}}" ;
+            setTimeout(function (){
+                $('#form-load').load("{{route("car_models.create")}}?id="+ id)
+            },100)
+        });
+    </script>
 @endpush

@@ -7,13 +7,11 @@
                 <div class="card-header">
                     <h3 class="card-title">الشكاوى</h3>
                     <div class="mr-auto pageheader-btn">
-                        @if(in_array(21,admin()->user()->permission_ids))
-                            <a href="#"  id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
-                                            <span>
-                                                <i class="fa fa-trash-o"></i>
-                                            </span> حذف المحدد
-                            </a>
-                        @endif
+                        <a href="#"  id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
+                            <span>
+                                <i class="fa fa-trash-o"></i>
+                            </span> حذف المحدد
+                        </a>
                     </div>
                 </div>
 

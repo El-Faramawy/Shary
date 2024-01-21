@@ -40,6 +40,8 @@ class PackageController extends Controller
         UserPackage::where('user_id', user_api()->id())->delete();
         $userPackage = UserPackage::create($data);
 
+        user_api()->user()->update(['verified' => 1]);
+
         Commission::where('user_id',user_api()->id())->delete();
 
         return $this->apiResponse($userPackage, '', 'simple');

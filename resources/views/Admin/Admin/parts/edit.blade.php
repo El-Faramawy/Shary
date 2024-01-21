@@ -42,21 +42,6 @@
                    value=""/>
         </div>
         <!--end::Input group-->
-{{--        <div class="d-flex flex-column mb-2 fv-row col-sm-12 form-group">--}}
-{{--            <label class="d-flex align-items-center fs-6 fw-bold form-label ">--}}
-{{--                <span class="required"> الصلاحيات </span>--}}
-{{--                <i class="fa fa-exclamation-circle ms-2 fs-7  text-primary" title="الصلاحيات"></i>--}}
-{{--            </label>--}}
-{{--            <select multiple="multiple" name="permissions[]" class="group-filter">--}}
-{{--                @foreach($sections as $section )--}}
-{{--                    <optgroup label="{{$section->name}}">--}}
-{{--                        @foreach($section->sectionPermissions as $permission)--}}
-{{--                            <option {{in_array($permission->id,$admin->permission_ids)?'selected':''}}  value="{{$permission->id}}">{{$permission->name}}</option>--}}
-{{--                        @endforeach--}}
-{{--                    </optgroup>--}}
-{{--                @endforeach--}}
-{{--            </select>--}}
-{{--        </div>--}}
 
     </div>
 

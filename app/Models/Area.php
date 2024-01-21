@@ -15,4 +15,8 @@ class Area extends Model
         return $this->attributes[getLanguage('name')];
     }
 
+    public function city(){
+        return $this->belongsTo(City::class);
+    }
+
 }

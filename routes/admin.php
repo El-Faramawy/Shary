@@ -50,33 +50,53 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('multi_delete_reports','ReportController@multiDelete')->name('reports.multiDelete');
 
         ################################### ad_packages ##########################################
-        Route::get('user_ad_packages','AdPackageController@user_ad_packages')->name('user_ad_packages.index');
         Route::resource('ad_packages','AdPackageController');
         Route::post('multi_delete_ad_packages','AdPackageController@multiDelete')->name('ad_packages.multiDelete');
-        Route::get('edit_ad_packages','AdPackageController@edit')->name('ad_packages.edit_ad_packages');
 
         ################################### packages ##########################################
-        Route::get('user_packages','PackageController@user_packages')->name('user_packages.index');
         Route::resource('packages','PackageController');
         Route::post('multi_delete_packages','PackageController@multiDelete')->name('packages.multiDelete');
-        Route::get('edit_packages','PackageController@edit')->name('packages.edit_packages');
 
-        ################################### cities ##########################################
+        ################################### countries ##########################################
+        Route::resource('countries','CountryController');
+        Route::post('multi_delete_countries','CountryController@multiDelete')->name('countries.multiDelete');
+
         Route::resource('cities','CityController');
         Route::post('multi_delete_cities','CityController@multiDelete')->name('cities.multiDelete');
 
-        ################################### areas ##########################################
         Route::resource('areas','AreaController');
         Route::post('multi_delete_sub_areas','AreaController@multiDelete')->name('areas.multiDelete');
 
-        ################################### sliders ##########################################
-        Route::resource('sliders','SliderController');
-        Route::post('multi_delete_sliders','SliderController@multiDelete')->name('sliders.multiDelete');
+        ################################### car_types ##########################################
+        Route::resource('car_types','CarTypeController');
+        Route::post('multi_delete_car_types','CarTypeController@multiDelete')->name('car_types.multiDelete');
 
-        ################################### contacts ##########################################
+        Route::resource('car_categories','CarCategoryController');
+        Route::post('multi_delete_car_categories','CarCategoryController@multiDelete')->name('car_categories.multiDelete');
+
+        Route::resource('car_models','CarModelController');
+        Route::post('multi_delete_car_models','CarModelController@multiDelete')->name('car_models.multiDelete');
+
+        Route::resource('car_colors','CarColorController');
+        Route::post('multi_delete_car_colors','CarColorController@multiDelete')->name('car_colors.multiDelete');
+
+        ################################### bills ##########################################
+        Route::resource('bills','BillController');
+        Route::post('multi_delete_bills','BillController@multiDelete')->name('bills.multiDelete');
+
+        ################################### rewords ##########################################
+        Route::resource('rewords','RewordController');
+        Route::post('multi_delete_rewords','RewordController@multiDelete')->name('rewords.multiDelete');
+
+        ################################### commissions ##########################################
+        Route::resource('commissions','CommissionController');
+        Route::post('multi_delete_commissions','CommissionController@multiDelete')->name('commissions.multiDelete');
+
+        ################################### contact_categories ##########################################
+        Route::resource('contact_categories','ContactCategoryController');
+        Route::post('multi_delete_contact_categories','ContactCategoryController@multiDelete')->name('contact_categories.multiDelete');
+
         Route::resource('contacts','ContactController');
-        Route::get('replay_contact/{id}','ContactController@replay')->name('replay_contact');
-        Route::post('post_replay_contact','ContactController@post_replay')->name('post_replay_contact');
         Route::post('multi_delete_contacts','ContactController@multiDelete')->name('contacts.multiDelete');
 
         ################################### settings ##########################################

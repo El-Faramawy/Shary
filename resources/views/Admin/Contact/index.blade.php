@@ -1,19 +1,22 @@
 @extends('layouts.admin.app')
-@section('page_title') تواصل معنا @endsection
+@section('page_title') أسئلة التواصل @endsection
 @section('content')
     <div class="row">
         <div class="col-md-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">تواصل معنا</h3>
+                    <h3 class="card-title">أسئلة التواصل</h3>
                     <div class="mr-auto pageheader-btn">
-                        @if(in_array(21,admin()->user()->permission_ids))
-                            <a href="#"  id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
-                                            <span>
-                                                <i class="fa fa-trash-o"></i>
-                                            </span> حذف المحدد
-                            </a>
-                        @endif
+                        <a href="#"  id="addBtn" class="btn btn-primary btn-icon text-white">
+                            <span>
+                                <i class="fe fe-plus"></i>
+                            </span> اضافة جديد
+                        </a>
+                        <a href="#"  id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
+                            <span>
+                                <i class="fa fa-trash-o"></i>
+                            </span> حذف المحدد
+                        </a>
                     </div>
                 </div>
 
@@ -24,11 +27,9 @@
                             <tr>
                                 <th class="text-white"><input type="checkbox" id="master"></th>
                                 <th class="text-white">#</th>
-                                <th class="text-white">اسم العميل</th>
-                                <th class="text-white">البريد الالكترونى</th>
-                                <th class="text-white">عنوان الرسالة</th>
-                                <th class="text-white">الرسالة</th>
-                                <th class="text-white">رد</th>
+                                <th class="text-white">القسم</th>
+                                <th class="text-white">السؤال</th>
+                                <th class="text-white">الجواب</th>
                                 <th class="text-white">حذف</th>
                             </tr>
                             </thead>
@@ -52,7 +53,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>تواصل معنا</h2>
+                    <h2>أسئلة التواصل</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" style="cursor: pointer" data-dismiss="modal" aria-label="Close">
@@ -96,11 +97,9 @@
         var  columns =[
             {data: 'checkbox', name: 'checkbox', orderable: false, searchable: false},
             {data: 'id', name: 'id'},
-            {data: 'name', name: 'name'},
-            {data: 'mail', name: 'mail'},
-            {data: 'subject', name: 'subject'},
-            {data: 'message', name: 'message'},
-            {data: 'replay', name: 'replay', orderable: false, searchable: false},
+            {data: 'contact_category', name: 'contact_category'},
+            {data: 'question_ar', name: 'question_ar'},
+            {data: 'answer_ar', name: 'answer_ar'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];
         //======================== addBtn =============================
@@ -110,14 +109,15 @@
 
 
     <script>
-        $(document).on('click', '.replayBtn', function (e) {
-            e.preventDefault()
+
+        $(document).on('click', '#addBtn', function (e) {
+            e.preventDefault();
+            $('#form-load').html(loader)
             $('#Modal').modal('show')
-            var url = $(this).attr('href')
+            var id = "{{$id}}" ;
             setTimeout(function (){
-                $('#form-load').load(url)
+                $('#form-load').load("{{route("contacts.create")}}?id="+ id)
             },100)
         });
-
     </script>
 @endpush

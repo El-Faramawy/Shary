@@ -6,16 +6,28 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">باقات الاعلانات</h3>
+                    <div class="mr-auto pageheader-btn">
+                        <a href="#" id="addBtn" class="btn btn-primary btn-icon text-white">
+                            <span>
+                                <i class="fe fe-plus"></i>
+                            </span> اضافة جديد
+                        </a>
+                        <a href="#" id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
+                            <span>
+                                <i class="fa fa-trash-o"></i>
+                            </span> حذف المحدد
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="{{--table-responsive--}}">
                         <table id="exportexample" class="table table-striped table-responsive-lg  card-table table-vcenter text-nowrap mb-0 table-primary align-items-center mb-0">
                             <thead class="bg-primary text-white">
                             <tr>
+                                <th class="text-white"><input type="checkbox" id="master"></th>
                                 <th class="text-white">النوع</th>
-                                <th class="text-white">عدد الشهور</th>
+                                <th class="text-white">المدة</th>
                                 <th class="text-white">السعر</th>
-                                <th class="text-white">عدد اعلانات البانر</th>
                                 <th class="text-white">تحكم</th>
                             </tr>
                             </thead>
@@ -80,13 +92,12 @@
 
     <script>
         var  columns =[
+            {data: 'checkbox', name: 'checkbox', orderable: false, searchable: false},
             {data: 'type', name: 'type'},
             {data: 'period', name: 'period'},
             {data: 'price', name: 'price'},
-            {data: 'panner_ads', name: 'panner_ads'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];
-        //======================== addBtn =============================
 
     </script>
     @include('layouts.admin.inc.ajax',['url'=>'ad_packages'])

@@ -188,9 +188,9 @@ class AuthController extends Controller
         }
         if ($request->from_sa){
             $user = user_api()->user();
-            if ($request->from_sa == 'yes'){
-                $user->verified = 1;
-            }
+//            if ($request->from_sa == 'yes'){
+//                $user->verified = 1;
+//            }
             $user->from_sa = $request->from_sa;
             $user->save();
         }

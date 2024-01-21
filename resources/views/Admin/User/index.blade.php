@@ -8,13 +8,11 @@
                 <div class="card-header">
                     <h3 class="card-title" >المستخدمين</h3>
                     <div class="mr-auto pageheader-btn">
-{{--                        @if(in_array(7,admin()->user()->permission_ids))--}}
                             <a href="#" id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
-                                            <span>
-                                                <i class="fa fa-trash-o"></i>
-                                            </span> حذف المحدد
+                                <span>
+                                    <i class="fa fa-trash-o"></i>
+                                </span> حذف المحدد
                             </a>
-{{--                        @endif--}}
                     </div>
                 </div>
                 <div class="card-body">
@@ -26,26 +24,17 @@
                                 <th class="text-white">#</th>
                                 <th class="text-white">الصورة</th>
                                 <th class="text-white">الاسم</th>
+                                <th class="text-white">اسم المستخدم</th>
                                 <th class="text-white">رقم الهاتف</th>
-                                <th class="text-white">المشاهدات</th>
+                                <th class="text-white">البريد الالكترونى</th>
                                 <th class="text-white">التوثيق</th>
-                                <th class="text-white">النوع</th>
+                                <th class="text-white">الدولة</th>
+                                <th class="text-white">العمولة</th>
+                                <th class="text-white">المحفظة</th>
                                 <th class="text-white">التقييم</th>
                                 <th class="text-white">التقييمات</th>
                                 <th class="text-white">الباقات</th>
-                                <th class="text-white">باقات الاعلانات</th>
                                 <th class="text-white"> الاعلانات</th>
-                                <th class="text-white">اسم الشركة</th>
-                                <th class="text-white">الاسم التعريفى الشركة</th>
-                                <th class="text-white">صورة الشركة</th>
-                                <th class="text-white">بانر الشركة</th>
-                                <th class="text-white">عنوان الشركة</th>
-                                <th class="text-white">وصف الشركة</th>
-                                <th class="text-white">واتساب الشركة</th>
-                                <th class="text-white">رقم هاتف الشركة</th>
-                                <th class="text-white">انستجرام الشركة</th>
-                                <th class="text-white">فيسبوك الشركة</th>
-                                <th class="text-white">تيكتوك الشركة</th>
                                 <th class="text-white">حظر</th>
                                 <th class="text-white">تحكم</th>
                             </tr>
@@ -97,26 +86,17 @@
             {data: 'id', name: 'id'},
             {data: 'image', name: 'image'},
             {data: 'name', name: 'name'},
+            {data: 'user_name', name: 'user_name'},
             {data: 'phone', name: 'phone'},
-            {data: 'views', name: 'views'},
+            {data: 'email', name: 'email'},
+            {data: 'country', name: 'country'},
             {data: 'verified', name: 'verified'},
-            {data: 'type', name: 'type'},
+            {data: 'commission', name: 'commission'},
+            {data: 'wallet', name: 'wallet'},
             {data: 'rate', name: 'rate'},
             {data: 'user_rate', name: 'user_rate'},
             {data: 'packages', name: 'packages'},
-            {data: 'ad_packages', name: 'ad_packages'},
             {data: 'products', name: 'products'},
-            {data: 'company_name', name: 'company_name'},
-            {data: 'company_username', name: 'company_username'},
-            {data: 'company_image', name: 'company_image'},
-            {data: 'company_panner', name: 'company_panner'},
-            {data: 'address', name: 'address'},
-            {data: 'company_description', name: 'company_description'},
-            {data: 'company_whatsapp', name: 'company_whatsapp'},
-            {data: 'company_phone', name: 'company_phone'},
-            {data: 'company_insta', name: 'company_insta'},
-            {data: 'company_facebook', name: 'company_facebook'},
-            {data: 'company_tiktok', name: 'company_tiktok'},
             {data: 'block', name: 'block'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];

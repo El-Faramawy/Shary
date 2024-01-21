@@ -7,20 +7,16 @@
                 <div class="card-header">
                     <h3 class="card-title">المدن</h3>
                     <div class="mr-auto pageheader-btn">
-{{--                        @if(in_array(63,admin()->user()->permission_ids))--}}
                             <a href="#"  id="addBtn" class="btn btn-primary btn-icon text-white">
                                             <span>
                                                 <i class="fe fe-plus"></i>
                                             </span> اضافة جديد
                             </a>
-{{--                        @endif--}}
-{{--                        @if(in_array(62,admin()->user()->permission_ids))--}}
                             <a href="#"  id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
                                             <span>
                                                 <i class="fa fa-trash-o"></i>
                                             </span> حذف المحدد
                             </a>
-{{--                        @endif--}}
                     </div>
                 </div>
                 <div class="card-body">
@@ -31,6 +27,7 @@
                                 <th class="text-white"><input type="checkbox" id="master"></th>
                                 <th class="text-white">#</th>
                                 <th class="text-white">الاسم</th>
+                                <th class="text-white">البلد</th>
                                 <th class="text-white">المناطق</th>
                                 <th class="text-white">تحكم</th>
                             </tr>
@@ -101,6 +98,7 @@
             {data: 'checkbox', name: 'checkbox', orderable: false, searchable: false},
             {data: 'id', name: 'id'},
             {data: 'name', name: 'name'},
+            {data: 'country', name: 'country'},
             {data: 'areas', name: 'areas'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];
@@ -108,5 +106,16 @@
 
     </script>
     @include('layouts.admin.inc.ajax',['url'=>'cities'])
+    <script>
 
+        $(document).on('click', '#addBtn', function (e) {
+            e.preventDefault();
+            $('#form-load').html(loader)
+            $('#Modal').modal('show')
+            var id = "{{$id}}" ;
+            setTimeout(function (){
+                $('#form-load').load("{{route("cities.create")}}?id="+ id)
+            },100)
+        });
+    </script>
 @endpush

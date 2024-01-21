@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ContactCategory extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public function contacts()
     {

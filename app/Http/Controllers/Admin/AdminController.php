@@ -20,19 +20,13 @@ class AdminController extends Controller
             $admins = Admin::latest()->where('id', '!=', admin()->user()->id)->get();
             return Datatables::of($admins)
                 ->addColumn('action', function ($admin) {
-                    $action = '';
-                    if(in_array(2,admin()->user()->permission_ids)){
-                        $action .= '
+                    return '
                         <button  id="editBtn" class="btn btn-default btn-primary btn-sm mb-2  mb-xl-0 "
                              data-id="' . $admin->id . '" ><i class="fa fa-edit text-white"></i>
-                        </button>';
-                    }
-                    if(in_array(3,admin()->user()->permission_ids)) {
-                        $action .= '<button class="btn btn-default btn-danger btn-sm mb-2 mb-xl-0 delete"
+                        </button>
+                        <button class="btn btn-default btn-danger btn-sm mb-2 mb-xl-0 delete"
                              data-id="' . $admin->id . '" ><i class="fa fa-trash-o text-white"></i>
                         </button>';
-                    }
-                    return $action;
                 })->addColumn('checkbox' , function ($admin){
                     return '<input type="checkbox" class="sub_chk" data-id="'.$admin->id.'">';
                 })
@@ -47,8 +41,7 @@ class AdminController extends Controller
     ################ Add Admin #################
     public function create()
     {
-        $sections = PermissionSection::all();
-        return view('Admin.Admin.parts.create',compact('sections'))->render();
+        return view('Admin.Admin.parts.create')->render();
     }
 
     public function store(Request $request)
@@ -72,46 +65,30 @@ class AdminController extends Controller
         $data['password'] = Hash::make($request->password);
         $admin = Admin::create($data);
 
-        if (isset($request->permissions) && $request->permissions != null){
-            foreach ($request->permissions as $permission){
-                $new_permission = new AdminPermission ;
-                $new_permission['admin_id'] = $admin->id;
-                $new_permission['permission_id'] = $permission;
-                $new_permission->save();
-            }
-        }
-
         return response()->json(
             [
                 'success' => 'true',
                 'message' => 'تم الاضافة بنجاح '
             ]);
     }
-    ###############################################
-
 
     ################ Edit Admin #################
     public function edit(Admin $admin)
     {
-        $sections = PermissionSection::all();
-//        return $request;
-        return view('Admin.Admin.parts.edit', compact('admin','sections'));
+        return view('Admin.Admin.parts.edit', compact('admin'));
 
     }
-    ###############################################
     ################ update Admin #################
     public function update(Request $request, Admin $admin)
     {
         $valedator = Validator::make($request->all(), [
             'email' => 'required | unique:admins,email,' . $admin->id,
             'name' => 'required',
-//            'password'=>  'required',
         ],
             [
                 'name.required' => 'الاسم مطلوب',
                 'email.unique' => 'هذا البريد الالكترونى موجود مسبقا',
                 'email.required' => ' البريد الالكترونى مطلوب',
-//                'password.required'=> ' كلمة المرور مطلوبة',
             ]
         );
         if ($valedator->fails())
@@ -124,24 +101,12 @@ class AdminController extends Controller
         }
         $admin->update($data);
 
-        if (isset($request->permissions) && $request->permissions != null){
-            AdminPermission::where('admin_id',$admin->id)->delete();
-            foreach ($request->permissions as $permission){
-                $new_permission = new AdminPermission ;
-                $new_permission['admin_id'] = $admin->id;
-                $new_permission['permission_id'] = $permission;
-                $new_permission->save();
-            }
-        }
-
         return response()->json(
             [
                 'success' => 'true',
                 'message' => 'تم التعديل بنجاح '
             ]);
     }
-    ###############################################
-
     ################ Delete Admin #################
     public function destroy(Admin $admin)
     {
@@ -179,7 +144,6 @@ class AdminController extends Controller
                 'email.exists' => 'هذا البريد الالكترونى غير موجود',
                 'email.unique' => 'هذا البريد الالكترونى موجود مسبقا',
                 'email.required' => ' البريد الالكترونى مطلوب',
-//                'password.required'=> ' كلمة المرور مطلوبة',
             ]
         );
         if ($valedator->fails())
