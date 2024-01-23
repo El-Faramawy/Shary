@@ -31,15 +31,14 @@ class UserController extends Controller
                 ->editColumn('image', function ($user) {
                     return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="' . $user->image . '">';
                 })
-                ->addColumn('packages', function ($user) {
-                    return '<a  class="btn btn-icon btn-bg-light btn-info btn-sm me-1 "
-                            href="'.route("user_packages.index","user_id=".$user->id).'" >
-                            <span class="svg-icon svg-icon-3" style="font-size:12px">
-                                <span class="svg-icon svg-icon-3">
-                                    <i class="fa fa-bars "></i>
-                                </span>
-                            </span>
-                            </button>';
+                ->addColumn('package', function ($user) {
+                    if (!$user->package) return '';
+                    return '<div class="text-sm fs-10">'.$user->package->price .' ريال <br>
+                        <span class="text-muted">'.$user->package->period.' شهر </span><br>
+                        من :  <span class="text-muted">'.$user->package->start_date.'</span><br>
+                        الى :  <span class="text-muted">'.$user->package->end_date.'</span><br>
+                        </div>'
+                        ;
                 })
                 ->addColumn('products', function ($user) {
                     return '<a  class="btn btn-icon btn-bg-light btn-success btn-sm me-1 "
@@ -73,6 +72,29 @@ class UserController extends Controller
                             <span class="svg-icon svg-icon-3" style="font-size:12px">
                                 <span class="svg-icon svg-icon-3">
                                     <i class="fa fa-star text-warning "></i>
+                                </span>
+                            </span>
+                            </button>';
+                })
+                ->editColumn('wallet',function ($user){
+                    return $user->wallet .
+                        '<br><button  class="btn btn-icon btn-bg-warning btn-light btn-sm me-1 change_wallet"
+                            href="'.route("change_wallet","user_id=".$user->id).'" value="0">
+                            <span class="svg-icon svg-icon-3" style="font-size:12px">
+                                <span class="svg-icon svg-icon-3">
+                                    <i class="fa fa-money text-danger "></i>
+                                </span>
+                            </span>
+                            تصفير
+                            </button>';
+
+                })
+                ->addColumn('user_questions', function ($item) {
+                    return '<a  class="btn btn-icon btn-bg-warning btn-primary btn-sm me-1 "
+                            href="'.route("user_questions.index","user_id=".$item->id).'" >
+                            <span class="svg-icon svg-icon-3" style="font-size:12px">
+                                <span class="svg-icon svg-icon-3">
+                                    <i class="fa fa-question text-white "></i>
                                 </span>
                             </span>
                             </button>';
@@ -154,5 +176,17 @@ class UserController extends Controller
         $verify_account = VerifyAccount::where('user_id', $request->id)->latest()->first();
         $verify_account_images = VerifyAccount::where('user_id', $request->id)->get();
         return view('Admin.User.parts.verify_account', compact('verify_account', 'verify_account_images'))->render();
+    }
+
+    public function change_wallet(Request $request)
+    {
+        $user = User::where('id',$request->user_id)->first();
+        $user->update(['wallet'=>$request->wallet]);
+
+        return response()->json(
+            [
+                'success' => 'true',
+                'message' => 'تم بنجاح'
+            ]);
     }
 }

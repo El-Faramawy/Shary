@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\ProductTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\PhotoTrait;
 use App\Models\Product;
@@ -17,26 +16,16 @@ class ProductController extends Controller
     {
         if ($request->ajax()){
             if(isset($request->user_id)){
-                $data =Product::where('user_id',$request->user_id)->latest()->get();
+                $data =Product::with('user')->where('user_id',$request->user_id)->latest()->get();
             }else{
-                $data =Product::latest()->get();
+                $data =Product::with('user')->latest()->get();
             }
             return Datatables::of($data)
                 ->addColumn('action', function ($product) {
-                    $action = '';
-//                    if (in_array(24, admin()->user()->permission_ids)) {
-//                        $action .= '
-//                        <button  id="editBtn" class="btn btn-default btn-primary btn-sm mb-2  mb-xl-0 "
-//                             data-id="' . $product->id . '" ><i class="fa fa-edit text-white"></i>
-//                        </button>';
-//                    }
-//                    if(in_array(25,admin()->user()->permission_ids)) {
-                        $action .=  '
+                    return  '
                              <a class="btn btn-default btn-danger btn-sm mb-2 mb-xl-0 delete"
                              data-id="' . $product->id . '" ><i class="fa fa-trash-o text-white"></i></a>
                        ';
-//                    }
-                    return $action;
                 })
                 ->addColumn('checkbox' , function ($product){
                     return '<input type="checkbox" class="sub_chk" data-id="'.$product->id.'">';
@@ -45,10 +34,10 @@ class ProductController extends Controller
                     return $product->category?$product->category->name_ar:'';
                 })
                 ->addColumn('user' , function ($product){
-                    return $product->user?$product->user->name:'';
+                    return $product->user->name ?? '';
                 })
-                ->addColumn('sub_category' , function ($product){
-                    return $product->sub_category?$product->sub_category->name_ar:'';
+                ->addColumn('country' , function ($product){
+                    return $product->country?$product->country->name_ar:'';
                 })
                 ->addColumn('city' , function ($product){
                     return $product->city?$product->city->name_ar:'';
@@ -66,74 +55,45 @@ class ProductController extends Controller
                             </span>
                             </button>';
                 })
-                ->addColumn('product_rate', function ($item) {
-                    return '<a  class="btn btn-icon btn-bg-warning btn-light btn-sm me-1 "
-                            href="'.route("product_rate.index","product_id=".$item->id).'" >
-                            <span class="svg-icon svg-icon-3" style="font-size:12px">
-                                <span class="svg-icon svg-icon-3">
-                                    <i class="fa fa-star text-warning "></i>
-                                </span>
-                            </span>
-                            </button>';
+                ->addColumn('details', function ($item) {
+                    return '<div class="card-options pr-2">
+                                    <a class="btn btn-sm btn-primary text-white detailsBtn"  href="' . route("product_details", $item->id) . '"><i class="fa fa-book mb-0"></i></a>
+                           </div>';
+                })
+//                ->addColumn('product_rate', function ($item) {
+//                    return '<a  class="btn btn-icon btn-bg-warning btn-light btn-sm me-1 "
+//                            href="'.route("product_rate.index","product_id=".$item->id).'" >
+//                            <span class="svg-icon svg-icon-3" style="font-size:12px">
+//                                <span class="svg-icon svg-icon-3">
+//                                    <i class="fa fa-star text-warning "></i>
+//                                </span>
+//                            </span>
+//                            </button>';
+//                })
+                ->editColumn('status',function ($user){
+//                    $block =in_array(10,admin()->user()->permission_ids)? "block" : " ";
+                    $color ="danger";
+                    $color2 ="success";
+                    $text = "حظر";
+                    $text2 = "تفعيل";
+                    if ($user->status == "pending"){
+                        return '
+                        <span class="badge badge-warning badge-sm d-block"> معلق </span>
+                        <a style="font-size: xx-large; display: inline-block!important;cursor: pointer " class="block text-center fw-3 pl-1 text-' . $color2 . '" data-value="active" data-id="' . $user->id . '" data-text="' . $text2 . '" ><i class="py-2 fw-3  fa fa-thumbs-up text-' . $color2 . '" ></i></a>
+                        <a style="font-size: xx-large; display: inline-block!important;cursor: pointer" class="block text-center fw-3 pr-1 text-' . $color . '" data-value="inactive" data-id="' . $user->id . '" data-text="' . $text . '" ><i class="py-2 fw-3  fa fa-thumbs-down text-' . $color . '" ></i></a>
+                                ';
+                    }elseif ($user->status == "active"){
+                        return '<span class="badge badge-success badge-sm d-block"> مفعل </span>
+                        <a style="font-size: xx-large; display: inline-block!important;cursor: pointer" class="block text-center fw-3 pr-1 text-' . $color . '" data-value="inactive" data-id="' . $user->id . '" data-text="' . $text . '" ><i class="py-2 fw-3  fa fa-thumbs-down text-' . $color . '" ></i></a>';
+                    }else{
+                        return '<span class="badge badge-danger badge-sm d-block"> غير مفعل </span>
+                        <a style="font-size: xx-large; display: inline-block!important;cursor: pointer " class="block text-center fw-3 pl-1 text-' . $color2 . '" data-value="active" data-id="' . $user->id . '" data-text="' . $text2 . '" ><i class="py-2 fw-3  fa fa-thumbs-up text-' . $color2 . '" ></i></a>';
+                    }
                 })
                 ->editColumn('type',function ($user){
-                    $color = $user->type == ProductTypeEnum::USER ? "light" :"primary";
-                    $text = $user->type == ProductTypeEnum::USER ? "فرد" :"شركة";
+                    $color = $user->type == 'car' ? "warning" :"info";
+                    $text = $user->type == 'car' ? "سيارات" :"عقارات";
                     return '<span class=" badge badge-sm badge-' . $color . '" >'.$text.'</span>';
-                })
-                ->editColumn('has_ad',function ($item){
-                    $color = $item->has_ad == 1 ? "success" :"danger";
-                    $text = $item->has_ad == 1 ? "نعم" :"لا";
-                    return '<span class="text-center fw-3 badge badge-sm badge-' . $color . '" style="color:white">'.$text.'</a>';
-                })
-                ->editColumn('is_chat',function ($item){
-                    $color = $item->is_chat == 1 ? "success" :"danger";
-                    $text = $item->is_chat == 1 ? "نعم" :"لا";
-                    return '<span class="text-center fw-3 badge badge-sm badge-' . $color . '" style="color:white">'.$text.'</a>';
-                })
-                ->editColumn('is_95',function ($item){
-                    $color = $item->is_95 == 1 ? "success" :"danger";
-                    $text = $item->is_95 == 1 ? "نعم" :"لا";
-                    return '<span class="text-center fw-3 badge badge-sm badge-' . $color . '" style="color:white">'.$text.'</a>';
-                })
-                ->editColumn('is_diesel',function ($item){
-                    $color = $item->is_diesel == 1 ? "success" :"danger";
-                    $text = $item->is_diesel == 1 ? "نعم" :"لا";
-                    return '<span class="text-center fw-3 badge badge-sm badge-' . $color . '" style="color:white">'.$text.'</a>';
-                })
-                ->editColumn('civil_defense_license',function ($item){
-                    $color = $item->civil_defense_license == 1 ? "success" :"danger";
-                    $text = $item->civil_defense_license == 1 ? "نعم" :"لا";
-                    return '<span class="text-center fw-3 badge badge-sm badge-' . $color . '" style="color:white">'.$text.'</a>';
-                })
-                ->editColumn('municipal_license',function ($item){
-                    $color = $item->municipal_license == 1 ? "success" :"danger";
-                    $text = $item->municipal_license == 1 ? "نعم" :"لا";
-                    return '<span class="text-center fw-3 badge badge-sm badge-' . $color . '" style="color:white">'.$text.'</a>';
-                })
-                ->editColumn('for_rent',function ($item){
-                    if ($item->for_rent == null) return '';
-                    $color = $item->for_rent == 1 ? "success" :"danger";
-                    $text = $item->for_rent == 1 ? "نعم" :"لا";
-                    return '<span class="text-center fw-3 badge badge-sm badge-' . $color . '" style="color:white">'.$text.'</a>';
-                })
-                ->editColumn('developed',function ($item){
-                    if ($item->developed == null) return '';
-                    $color = $item->developed == 1 ? "success" :"danger";
-                    $text = $item->developed == 1 ? "نعم" :"لا";
-                    return '<span class="text-center fw-3 badge badge-sm badge-' . $color . '" style="color:white">'.$text.'</a>';
-                })
-                ->editColumn('show_price',function ($item){
-                    $color = $item->show_price == 1 ? "success" :"danger";
-                    $text = $item->show_price == 1 ? "نعم" :"لا";
-                    return '<span class="text-center fw-3 badge badge-sm badge-' . $color . '" style="color:white">'.$text.'</a>';
-                })
-                ->editColumn('favourite', function ($item) {
-                    $color = $item->favourite == 1 ? "warning" : "dark" ;
-                    return '<span style="font-size: x-large;" class="favourite fw-1  text-' . $color . '"
-                    data-id="' . $item->id . '" style="cursor: pointer;">
-                    <i class="py-2 fw-1  fa fa-star text-' . $color . '" ></i></span>
-                    ' ;
                 })
                 ->addColumn('address', function ($item) {
                     $text = "الذهاب للعنوان";
@@ -142,12 +102,6 @@ class ProductController extends Controller
                 ->editColumn('image',function ($product){
                     return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="'.$product->image.'">';
                 })
-//                ->editColumn('civil_defense_license',function ($product){
-//                    return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="'.$product->civil_defense_license.'">';
-//                })
-//                ->editColumn('municipal_license',function ($product){
-//                    return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open(this.src)" src="'.$product->municipal_license.'">';
-//                })
                 ->editColumn('video',function ($product){
                     $video = "'".$product->video."'";
                     return '<img alt="image" class="img list-thumbnail border-0" style="width:100px;border-radius:10px" onclick="window.open('.$video.')" src="'.$product->video_cover.'">';
@@ -187,6 +141,25 @@ class ProductController extends Controller
         $text = $product->favourite == 1 ? "تم الحذف من المنتجات المفضلة بنجاح" : "تم الاضافة للمنتجات المفضلة بنجاح";
         $product->favourite = $product->favourite == 1 ? 0 : 1;
         $product->save();
+        return response()->json(
+            [
+                'code' => 200,
+                'message' => $text
+            ]);
+    }
+
+    public function product_details($id)
+    {
+        $product = Product::where('id', $id)->first();
+        return view('Admin.Product.parts.details', compact('product'))->render();
+    }
+
+    public function block_product(Request $request , $id)
+    {
+        $product = Product::where('id',$id)->first();
+        $product->status = $request->value;
+        $product->save();
+        $text = $product->status == "active" ? "تم التفعيل بنجاح" :"تم الحظر بنجاح";
         return response()->json(
             [
                 'code' => 200,

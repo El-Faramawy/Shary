@@ -31,7 +31,7 @@ class CommentController extends Controller
                             </button>';
                 })
                 ->addColumn('user', function ($item) {
-                    return $item->user->name;
+                    return $item->user->name ?? '';
                 })
                 ->escapeColumns([])
                 ->make(true);

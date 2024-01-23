@@ -21,7 +21,7 @@ class ReplyController extends Controller
                        ';
                 })
                 ->addColumn('user', function ($item) {
-                    return $item->user->name;
+                    return $item->user->name ?? '';
                 })
                 ->escapeColumns([])
                 ->make(true);

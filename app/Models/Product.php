@@ -60,6 +60,11 @@ class Product extends Model
     {
         return $this->belongsTo(City::class);
     }
+    //===================  country ===========================
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
     //===================  images ===========================
     public function images()
     {

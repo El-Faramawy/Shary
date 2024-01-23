@@ -22,7 +22,7 @@ class RewordController extends Controller
                     </button>
                    ';
                 })->editColumn('user', function ($item) {
-                    return $item->user?->name;
+                    return $item->user ? '<a href="' . url("admin/users?user_id=" . $item->user->id) . '" >' . $item->user->name . '</a>' : '';
                 })->addColumn('checkbox', function ($item) {
                     return '<input type="checkbox" class="sub_chk" data-id="' . $item->id . '">';
                 })

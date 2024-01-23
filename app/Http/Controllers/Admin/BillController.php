@@ -32,7 +32,7 @@ class BillController extends Controller
                     $text = $user->status == 'no' ? "لا" : "نعم";
                     return '<span class=" badge badge-sm badge-' . $color . '" >' . $text . '</span>';
                 })->editColumn('user', function ($item) {
-                    return $item->user?->name;
+                    return $item->user ? '<a href="' . url("admin/users?user_id=" . $item->user->id) . '" >' . $item->user->name . '</a>' : '';
                 })->editColumn('created_at', function ($item) {
                     return date('Y-m-d',strtotime($item->created_at));
                 })->addColumn('checkbox', function ($item) {

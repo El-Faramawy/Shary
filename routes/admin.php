@@ -34,16 +34,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('verify_account','UserController@verify_account')->name('verify_account');
         Route::get('verify_images','UserController@verify_images')->name('verify_images');
         Route::post('multi_delete_users','UserController@multiDelete')->name('users.multiDelete');
-        Route::post('change_points_number','UserController@change_points_number')->name('change_points_number');
+        Route::post('change_wallet','UserController@change_wallet')->name('change_wallet');
         Route::get('block_user/{id}','UserController@block')->name('users.block');
-
-        ################################### categories ##########################################
-        Route::resource('categories','CategoryController');
-        Route::post('multi_delete_categories','CategoryController@multiDelete')->name('categories.multiDelete');
-
-        ################################### sub_categories ##########################################
-        Route::resource('sub_categories','SubCategoryController');
-        Route::post('multi_delete_sub_categories','SubCategoryController@multiDelete')->name('sub_categories.multiDelete');
 
         ################################### reports ##########################################
         Route::resource('reports','ReportController');
@@ -104,10 +96,9 @@ Route::group(['prefix' => 'admin'], function () {
 
         ################################### products ##########################################
         Route::resource('products','ProductController');
-        Route::get('get_market_categories','ProductController@get_market_categories')->name('get_market_categories');
-        Route::get('get_market_sub_categories','ProductController@get_market_sub_categories')->name('get_market_sub_categories');
         Route::post('multi_delete_products','ProductController@multiDelete')->name('products.multiDelete');
-        Route::get('favourite_product','ProductController@favourite_product')->name('favourite_product');
+        Route::get('product_details/{id}','ProductController@product_details')->name('product_details');
+        Route::get('block_product/{id}','ProductController@block_product')->name('block_product');
 
         ################################### comment ##########################################
         Route::resource('comment','CommentController');
@@ -124,6 +115,10 @@ Route::group(['prefix' => 'admin'], function () {
         ################################### user_rate ##########################################
         Route::resource('user_rate','UserRateController');
         Route::post('multi_delete_user_rate','UserRateController@multiDelete')->name('user_rate.multiDelete');
+
+        ################################### user_questions ##########################################
+        Route::resource('user_questions','UserQuestionsController');
+        Route::post('multi_delete_user_questions','UserQuestionsController@multiDelete')->name('user_questions.multiDelete');
 
         ################################### notifications ##########################################
         Route::resource('notifications','NotificationController');

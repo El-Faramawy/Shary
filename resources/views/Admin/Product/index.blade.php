@@ -7,20 +7,11 @@
                 <div class="card-header">
                     <h3 class="card-title">الاعلانات</h3>
                     <div class="mr-auto pageheader-btn">
-                        {{--                        @if(in_array(26,admin()->user()->permission_ids))--}}
-                        {{--                            <a href="#"  id="addBtn" class="btn btn-primary btn-icon text-white">--}}
-                        {{--                                            <span>--}}
-                        {{--                                                <i class="fe fe-plus"></i>--}}
-                        {{--                                            </span> منتج جديد--}}
-                        {{--                            </a>--}}
-                        {{--                        @endif--}}
-                        {{--                        @if(in_array(25,admin()->user()->permission_ids))--}}
                         <a href="#" id="multiDeleteBtn" class="btn btn-danger btn-icon text-white">
-                                            <span>
-                                                <i class="fa fa-trash-o"></i>
-                                            </span> حذف المحدد
+                            <span>
+                                <i class="fa fa-trash-o"></i>
+                            </span> حذف المحدد
                         </a>
-                        {{--                        @endif--}}
                     </div>
                 </div>
                 <div class="card-body">
@@ -35,46 +26,18 @@
                                 <th class="text-white">الاسم</th>
                                 <th class="text-white">الوصف</th>
                                 <th class="text-white">المستخدم</th>
-                                <th class="text-white">القسم</th>
-                                <th class="text-white">القسم الفرعى</th>
+                                <th class="text-white">البلد</th>
+                                <th class="text-white">المدينة</th>
                                 <th class="text-white">المنطقة</th>
-                                <th class="text-white">الحى</th>
                                 <th class="text-white">النوع</th>
                                 <th class="text-white">السعر</th>
                                 <th class="text-white">العنوان</th>
                                 <th class="text-white">رقم الهاتف</th>
                                 <th class="text-white">واتساب</th>
-                                <th class="text-white">نوع الناشر</th>
-                                <th class="text-white">رقم الرخصة</th>
-                                <th class="text-white">الشارع</th>
-                                <th class="text-white">مساحة المحطة</th>
-                                <th class="text-white">اطوالها</th>
-                                <th class="text-white">عدد المضخات</th>
-                                <th class="text-white">الواجهة</th>
-                                {{--                                <th class="text-white" >يوجد 95</th>--}}
-                                {{--                                <th class="text-white" >يوجد ديزل</th>--}}
-                                <th class="text-white">عمر المحطة</th>
-                                {{--                                <th class="text-white" >عدد حفر الزيت</th>--}}
-                                {{--                                <th class="text-white" >كم المساحة بالمتر لغيار الزيت</th>--}}
-                                {{--                                <th class="text-white" >مساحة البنشر</th>--}}
-                                {{--                                <th class="text-white" >مساحة التموينات</th>--}}
-                                {{--                                <th class="text-white" >عدد الاكشاك الدرايف ثرو</th>--}}
-                                <th class="text-white">مرافق اخرى</th>
-                                {{--                                <th class="text-white" >عدد الغرف السكنيه</th>--}}
-                                {{--                                <th class="text-white" >عدد عدادات الكهرباء</th>--}}
-                                {{--                                <th class="text-white" >عدد توانك المحروفات</th>--}}
-                                {{--                                <th class="text-white" >كميه كل تانك</th>--}}
-                                <th class="text-white"> المده المتوقع الاتفاق عليها</th>
-                                {{--                                <th class="text-white" >اهم نقطه السوم</th>--}}
-                                {{--                                <th class="text-white" >الحد</th>--}}
-                                <th class="text-white">عرض السعر</th>
-                                <th class="text-white">رخصة الدفاع المدني</th>
-                                <th class="text-white">رخصة البلديه</th>
-                                <th class="text-white">المحطة للايجار</th>
-                                <th class="text-white">المحطة مطورة</th>
-                                <th class="text-white">منتج مميز</th>
+                                <th class="text-white">الحالة</th>
                                 <th class="text-white">الكومنتات</th>
-                                <th class="text-white">التقييمات</th>
+                                <th class="text-white">التفاصيل</th>
+{{--                                <th class="text-white">التقييمات</th>--}}
                                 <th class="text-white">تحكم</th>
                             </tr>
                             </thead>
@@ -123,17 +86,17 @@
 
                 </div>
                 <!--end::Modal body-->
-                <div class="modal-footer">
-                    <div class=" ">
-                        <input form="form" value="حفظ" type="submit" id="submit" class="btn btn-primary "
-                               style="width: 100px">
+{{--                <div class="modal-footer">--}}
+{{--                    <div class=" ">--}}
+{{--                        <input form="form" value="حفظ" type="submit" id="submit" class="btn btn-primary "--}}
+{{--                               style="width: 100px">--}}
                         {{--                            <span class="indicator-label ">حفظ</span>--}}
 
-                    </div>
-                    <div class=" ">
-                        <button class="btn btn-light me-3 close_model" style="width: 100px">غلق</button>
-                    </div>
-                </div>
+{{--                    </div>--}}
+{{--                    <div class=" ">--}}
+{{--                        <button class="btn btn-light me-3 close_model" style="width: 100px">غلق</button>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             </div>
 
             <!--end::Modal content-->
@@ -151,8 +114,7 @@
             {data: 'name', name: 'name'},
             {data: 'description', name: 'description'},
             {data: 'user', name: 'user'},
-            {data: 'category', name: 'category'},
-            {data: 'sub_category', name: 'sub_category'},
+            {data: 'country', name: 'country'},
             {data: 'city', name: 'city'},
             {data: 'area', name: 'area'},
             {data: 'type', name: 'type'},
@@ -160,97 +122,28 @@
             {data: 'address', name: 'address'},
             {data: 'phone', name: 'phone'},
             {data: 'whatsapp', name: 'whatsapp'},
-            {data: 'publisher_type', name: 'publisher_type'},
-            {data: 'licence_number', name: 'licence_number'},
-            {data: 'street', name: 'street'},
-            {data: 'station_size', name: 'station_size'},
-            {data: 'lenght', name: 'lenght'},
-            {data: 'pumb_number', name: 'pumb_number'},
-            {data: 'direction', name: 'direction'},
-            // {data: 'is_95', name: 'is_95'},
-            // {data: 'is_diesel', name: 'is_diesel'},
-            {data: 'age', name: 'age'},
-            // {data: 'oil_no', name: 'oil_no'},
-            // {data: 'oil_size', name: 'oil_size'},
-            // {data: 'bencher_size', name: 'bencher_size'},
-            // {data: 'grocery_size', name: 'grocery_size'},
-            // {data: 'stalls_no', name: 'stalls_no'},
-            {data: 'others', name: 'others'},
-            // {data: 'room_no', name: 'room_no'},
-            // {data: 'electric_no', name: 'electric_no'},
-            // {data: 'tank_no', name: 'tank_no'},
-            // {data: 'tank_size', name: 'tank_size'},
-            {data: 'time_period', name: 'time_period'},
-            // {data: 'important_point', name: 'important_point'},
-            // {data: 'limit', name: 'limit'},
-            {data: 'show_price', name: 'show_price'},
-            {data: 'civil_defense_license', name: 'civil_defense_license'},
-            {data: 'municipal_license', name: 'municipal_license'},
-            {data: 'for_rent', name: 'for_rent'},
-            {data: 'developed', name: 'developed'},
-            {data: 'favourite', name: 'favourite'},
+            {data: 'status', name: 'status'},
             {data: 'comment', name: 'comment'},
-            {data: 'product_rate', name: 'product_rate'},
+            {data: 'details', name: 'details'},
+            // {data: 'product_rate', name: 'product_rate'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ];
         //======================== addBtn =============================
 
     </script>
     @include('layouts.admin.inc.ajax',['url'=>'products'])
+    @include('Admin.Product.parts.block',['url'=>'products'])
 
     <script>
-        $(document).on('click',".favourite",function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            var url = "{{route('favourite_product')}}?id="+id;
-            $.ajax({
-                url: url,
-                type: 'GET',
-                beforeSend: function () {
-                    $('#global-loader').show()
-                },
-                success: function (data) {
-
-                    window.setTimeout(function () {
-                        $('#global-loader').hide()
-                        if (data.code === 200) {
-                            my_toaster(data.message)
-                            $('#exportexample').DataTable().ajax.reload(null, false);
-                        }
-                    }, 100);
-
-                },
-                error: function (data) {
-                    $('#global-loader').hide()
-                    console.log(data)
-                    if (data.status === 500) {
-                        my_toaster('هناك خطأ','error')
-                    }
-
-                    if (data.status === 422) {
-                        var errors = $.parseJSON(data.responseText);
-
-                        $.each(errors, function (key, value) {
-                            if ($.isPlainObject(value)) {
-                                $.each(value, function (key, value) {
-                                    my_toaster(value,'error')
-                                });
-
-                            } else {
-
-                            }
-                        });
-                    }
-                    if (data.status == 421){
-                        my_toaster(data.message,'error')
-                    }
-
-                },//end error method
-
-                cache: false,
-                contentType: false,
-                processData: false
-            });
+        $(document).on('click', '.detailsBtn', function (e) {
+            e.preventDefault()
+            $('#form-load').html(loader)
+            $('#Modal').modal('show')
+            var url = $(this).attr('href')
+            setTimeout(function (){
+                $('#form-load').load(url)
+            },100)
         });
     </script>
+
 @endpush

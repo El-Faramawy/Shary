@@ -33,7 +33,8 @@
                                 <th class="text-white">المحفظة</th>
                                 <th class="text-white">التقييم</th>
                                 <th class="text-white">التقييمات</th>
-                                <th class="text-white">الباقات</th>
+                                <th class="text-white">الباقة</th>
+                                <th class="text-white"> الاسئلة و الاجوبة</th>
                                 <th class="text-white"> الاعلانات</th>
                                 <th class="text-white">حظر</th>
                                 <th class="text-white">تحكم</th>
@@ -89,13 +90,14 @@
             {data: 'user_name', name: 'user_name'},
             {data: 'phone', name: 'phone'},
             {data: 'email', name: 'email'},
-            {data: 'country', name: 'country'},
             {data: 'verified', name: 'verified'},
+            {data: 'country', name: 'country'},
             {data: 'commission', name: 'commission'},
             {data: 'wallet', name: 'wallet'},
             {data: 'rate', name: 'rate'},
             {data: 'user_rate', name: 'user_rate'},
-            {data: 'packages', name: 'packages'},
+            {data: 'package', name: 'package'},
+            {data: 'user_questions', name: 'user_questions'},
             {data: 'products', name: 'products'},
             {data: 'block', name: 'block'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -161,6 +163,28 @@
                 processData: false
             });
         });
+    </script>
+
+    <script>
+        $(document).on('click  ', '.change_wallet', function (event) {
+            var wallet = $(this).attr('value')
+            var url = $(this).attr("href")
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    '_token': "{{csrf_token()}}",
+                    'wallet': wallet,
+                },
+                success: function (data) {
+                    if (data.success == 'true') {
+                        my_toaster(data.message)
+                        $('#exportexample').DataTable().ajax.reload(null, false);
+                    }
+                }
+            })
+        });
+
     </script>
 
     <script>
